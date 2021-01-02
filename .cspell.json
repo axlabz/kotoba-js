@@ -1,0 +1,17 @@
+{
+	"version": "0.1",
+	"$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json",
+	"language": "en",
+	"words": ["kotoba", "prettierrc", "yomichan"],
+	"flagWords": [],
+	"ignorePaths": [
+		"package.json",
+		"package-lock.json",
+		"jest.config.js",
+		"yarn.lock",
+		"tsconfig.json",
+		"node_modules/**",
+		".vscode/**"
+	],
+	"ignoreRegExpList": []
+}

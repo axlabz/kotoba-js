@@ -1,0 +1,45 @@
+{
+	"root": true,
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.eslint.json"
+	},
+	"env": {
+		"es6": true,
+		"node": true,
+		"browser": true,
+		"jest": true
+	},
+	"ignorePatterns": ["node_modules", "build", "coverage", "dist", "*.config.js"],
+	"plugins": ["@typescript-eslint", "import", "eslint-comments", "jest", "only-warn"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:eslint-comments/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"plugin:import/typescript",
+		"prettier",
+		"prettier/@typescript-eslint",
+		"plugin:jest/recommended"
+	],
+	"globals": {
+		"BigInt": true,
+		"console": true,
+		"WebAssembly": true
+	},
+	"rules": {
+		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"eslint-comments/disable-enable-pair": ["error", { "allowWholeFile": true }],
+		"eslint-comments/no-unused-disable": "error",
+		"import/order": ["error", { "newlines-between": "always", "alphabetize": { "order": "asc" } }],
+		"sort-imports": ["error", { "ignoreDeclarationSort": true, "ignoreCase": true }],
+
+		// Custom rules:
+		"@typescript-eslint/no-non-null-assertion": "off",
+		"@typescript-eslint/prefer-regexp-exec": "off",
+		"jest/expect-expect": "off",
+		"jest/no-disabled-tests": "off"
+	}
+}
