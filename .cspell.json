@@ -2,7 +2,21 @@
 	"version": "0.1",
 	"$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json",
 	"language": "en",
-	"words": ["kotoba", "prettierrc", "yomichan"],
+	"words": [
+		"godan",
+		"ichidan",
+		"kanjidic",
+		"keiyoushi",
+		"kotoba",
+		"kunyomi",
+		"kuru",
+		"jmdict",
+		"jszip",
+		"onyomi",
+		"prettierrc",
+		"suru",
+		"yomichan"
+	],
 	"flagWords": [],
 	"ignorePaths": [
 		"package.json",

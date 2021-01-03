@@ -1,8 +1,12 @@
-.PHONY: run build test clean lint check serve coverage
+.PHONY: run import build test clean lint check serve coverage
 
-# Run the TypeScript application directly,
+# Run the TypeScript application directly.
 run:
 	@npm start -s
+
+# Run the import script.
+import:
+	@npm run import
 
 # Build output files in `build`.
 build:
