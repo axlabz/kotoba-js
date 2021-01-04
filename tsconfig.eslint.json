@@ -1,6 +1,6 @@
 {
 	// extend your base config so you don't have to redefine your compilerOptions
 	"extends": "./tsconfig.json",
-	"include": ["./src/**/*.ts", "./src/**/*.tsx", "test/**/*.test.ts"],
+	"include": ["./src/**/*.ts", "./src/**/*.tsx", "test/**/*.test.ts", "../kana-js/src/**/*.ts"],
 	"exclude": ["node_modules/**"]
 }

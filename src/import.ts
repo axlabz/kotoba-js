@@ -1,3 +1,5 @@
+import { optional } from './util'
+
 /**
  * Source is a representation of a data source file (i.e. the Yomichan zip files)
  * that abstracts away all the IO stuff.
@@ -35,7 +37,7 @@ export type Dictionary = {
 }
 
 /** Format of the index file. */
-type Index = {
+export type Index = {
 	/** Title of the source file */
 	title: string
 
@@ -55,7 +57,7 @@ type Index = {
  * Each entry contains a single definition for the term given by `expression`.
  * The definition itself consists of one or more `glossary` items.
  */
-type Term = {
+export type Term = {
 	/** Term expression. */
 	expression: string
 
@@ -94,7 +96,7 @@ type Term = {
 /**
  * Kanji from an imported dictionary.
  */
-type Kanji = {
+export type Kanji = {
 	/** Kanji character. */
 	character: string
 
@@ -121,7 +123,7 @@ type Kanji = {
  * Tag for a kanji or term. For kanji those are also used to describe
  * the `stats` keys.
  */
-type Tag = {
+export type Tag = {
 	/** Name to reference this tag by. */
 	name: string
 
@@ -142,7 +144,7 @@ type Tag = {
 }
 
 /** Frequency metadata for kanji or terms. */
-type Meta = {
+export type Meta = {
 	/** Kanji or term. */
 	expression: string
 
@@ -266,11 +268,24 @@ export async function importSource(source: Source) {
 	return dict
 }
 
-export function outputDict(dict: Dictionary) {
-	console.log(`    ${dict.index.title} (format: ${dict.index.format}, revision: ${dict.index.revision}) {`)
-	console.log(`        List = ${dict.terms.length} terms / ${dict.kanji.length} kanji`)
-	console.log(`        Meta = ${dict.terms_meta.length} terms / ${dict.kanji_meta.length} kanji`)
-	console.log(`        Tags = ${dict.tags.length}`)
+export function dictionaryInfo(dict: Dictionary, args = optional({ short: false, indent: '' })) {
+	const { short, indent } = args || {}
+	if (short) {
+		const output: string[] = []
+		dict.terms.length && output.push(`${dict.terms.length} terms`)
+		dict.kanji.length && output.push(`${dict.kanji.length} kanji`)
+		dict.terms_meta.length && output.push(`${dict.terms_meta.length} terms frequency`)
+		dict.kanji_meta.length && output.push(`${dict.kanji_meta.length} kanji frequency`)
+		dict.tags.length && output.push(`${dict.tags.length} tags`)
+		return `${dict.index.title} with ${output.join(' and ')}`
+	}
+
+	const lines: string[] = []
+
+	lines.push(`${dict.index.title} (format: ${dict.index.format}, revision: ${dict.index.revision}) {`)
+	lines.push(`    List = ${dict.terms.length} terms / ${dict.kanji.length} kanji`)
+	lines.push(`    Meta = ${dict.terms_meta.length} terms / ${dict.kanji_meta.length} kanji`)
+	lines.push(`    Tags = ${dict.tags.length}`)
 
 	if (dict.kanji.length) {
 		const stats: { [key: string]: boolean } = {}
@@ -279,7 +294,7 @@ export function outputDict(dict: Dictionary) {
 				stats[key] = true
 			}
 		}
-		console.log(`\n        Stats = ${Object.keys(stats).sort().join(',')}`)
+		lines.push(``, `    Stats = ${Object.keys(stats).sort().join(',')}`)
 	}
 
 	if (dict.terms.length) {
@@ -303,26 +318,28 @@ export function outputDict(dict: Dictionary) {
 		const definitions = Object.keys(definitionMap).sort().join(' ')
 
 		if (rules.length) {
-			console.log(`\n        Rules = ${rules}`)
+			lines.push(``, `    Rules = ${rules}`)
 		}
 		if (terms.length) {
-			console.log(`\n        Term Tags = ${terms}`)
+			lines.push(``, `    Term Tags = ${terms}`)
 		}
 		if (definitions.length) {
-			console.log(`\n        Definition Tags = ${definitions}`)
+			lines.push(``, `    Definition Tags = ${definitions}`)
 		}
 	}
 
 	if (dict.tags.length) {
-		console.log(`\n        All tags {`)
+		lines.push(``, `    All tags {`)
 		for (const tag of dict.tags) {
 			const category = tag.category ? ` (${tag.category})` : ``
-			console.log(
-				`            - ${tag.name}${category}: ${tag.description} [score: ${tag.score}, order: ${tag.order}]`,
+			lines.push(
+				`        - ${tag.name}${category}: ${tag.description} [score: ${tag.score}, order: ${tag.order}]`,
 			)
 		}
-		console.log(`        }`)
+		lines.push(`    }`)
 	}
 
-	console.log(`    }`)
+	lines.push(`}`)
+
+	return (indent ? lines.map((x) => (x ? indent + x : x)) : lines).join('\n')
 }
